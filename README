@@ -1,0 +1,7 @@
+To get started in the console execute the following:
+
+1. cd API
+2. npm i
+3. node api.js
+
+That's it! Your API is running. 
