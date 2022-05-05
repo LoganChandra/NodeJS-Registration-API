@@ -111,6 +111,7 @@ app.get("/", (req, res) => {
 app.post("/admin/signup", async (req, res) => {
   let errors = [];
   try {
+    // Validate inputs
     let { Username, Email, Password } = req.body;
     if (!Username) {
       errors.push("Username is missing");
@@ -124,7 +125,7 @@ app.post("/admin/signup", async (req, res) => {
     }
     let userExists = false;
 
-    // Check if customer exists
+    // Check if admin exists
     let sql = "SELECT * FROM Users WHERE Email = ? and Admin = 1";
     await db.all(sql, Email, (err, result) => {
       if (err) {
@@ -132,7 +133,7 @@ app.post("/admin/signup", async (req, res) => {
         return;
       }
 
-      // Insert customer if they don't exist
+      // Insert admin if they don't exist
       if (result.length === 0) {
         let salt = bcrypt.genSaltSync(10);
 
@@ -180,6 +181,7 @@ app.post("/admin/signup", async (req, res) => {
 // Admin signin
 app.post("/admin/signin", async (req, res) => {
   try {
+    // Validate inputs
     let { Email, Password } = req.body;
     // Make sure there is an Email and Password in the request
     if (!(Email && Password)) {
@@ -188,6 +190,7 @@ app.post("/admin/signin", async (req, res) => {
 
     let user = [];
 
+    // Check if admin exists
     let sql = "SELECT * FROM Users WHERE Email = ? and Admin = 1";
     db.all(sql, Email, function (err, rows) {
       if (err) {
@@ -201,7 +204,7 @@ app.post("/admin/signin", async (req, res) => {
       let PHash = bcrypt.hashSync(Password, user[0].Salt);
 
       if (PHash === user[0].Password) {
-        // * CREATE JWT TOKEN
+        // Create the JWT token
         let token = jwt.sign(
           {
             user_id: user[0].Id,
@@ -211,7 +214,7 @@ app.post("/admin/signin", async (req, res) => {
           },
           process.env.TOKEN_KEY,
           {
-            expiresIn: "1h", // 60s = 60 seconds - (60m = 60 minutes, 2h = 2 hours, 2d = 2 days)
+            expiresIn: "1h",
           }
         );
 
@@ -231,6 +234,7 @@ app.post("/admin/signin", async (req, res) => {
 app.post("/customer/signup", async (req, res) => {
   let errors = [];
   try {
+    // Validate inputs
     let { Username, Email, Password } = req.body;
 
     if (!Username) {
@@ -301,6 +305,7 @@ app.post("/customer/signup", async (req, res) => {
 // Customer signin
 app.post("/customer/signin", async (req, res) => {
   try {
+    // Validate inputs
     let { Email, Password } = req.body;
     // Make sure there is an Email and Password in the request
     if (!(Email && Password)) {
@@ -309,6 +314,7 @@ app.post("/customer/signin", async (req, res) => {
 
     let user = [];
 
+    // Check if customer exists
     let sql = "SELECT * FROM Users WHERE Email = ? and Admin = 0";
     db.all(sql, Email, function (err, rows) {
       if (err) {
@@ -322,7 +328,7 @@ app.post("/customer/signin", async (req, res) => {
       let PHash = bcrypt.hashSync(Password, user[0].Salt);
 
       if (PHash === user[0].Password) {
-        // * CREATE JWT TOKEN
+        // Create the JWT token
         let token = jwt.sign(
           {
             user_id: user[0].Id,
@@ -332,7 +338,7 @@ app.post("/customer/signin", async (req, res) => {
           },
           process.env.TOKEN_KEY,
           {
-            expiresIn: "1h", // 60s = 60 seconds - (60m = 60 minutes, 2h = 2 hours, 2d = 2 days)
+            expiresIn: "1h",
           }
         );
 

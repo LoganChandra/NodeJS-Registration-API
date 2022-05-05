@@ -11,7 +11,7 @@ const verifyTokenCustomer = (req, res, next) => {
   }
   try {
     const decoded = jwt.verify(token, process.env.TOKEN_KEY);
-
+    // check if the user is a customer
     if(decoded.Admin != 0){
         return res.status(401).send("Invalid Token");
     }
@@ -32,6 +32,7 @@ const verifyTokenAdmin = (req, res, next) => {
   }
   try {
     const decoded = jwt.verify(token, process.env.TOKEN_KEY);
+    // check if the user is an admin
     if(decoded.Admin != 1){
         return res.status(401).send("Invalid Token");
     }
