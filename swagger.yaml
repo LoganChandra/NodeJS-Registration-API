@@ -1,0 +1,177 @@
+swagger: '2.0'
+info:
+  description: 'Simple authorization API for admins and customers using JWT tokens.'
+  version: 1.0.0
+  title: NodeJS Registration API
+tags:
+  - name: Customer
+    description: Authorization for customers 
+  - name: Admin
+    description: Authorization for admins
+  - name: user
+    description: Operations about user
+paths:
+  /admin/signup:
+    post:
+      tags:
+        - Admin
+      summary: Signup for admins
+      description: ''
+      operationId: admin signup
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/signup'
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Invalid request
+        '402':
+          description: DB error
+      # security:
+      #   - auth_admin:
+      #       - read:content
+  /admin/signin:
+    post:
+      tags:
+        - Admin
+      summary: Signin for admins
+      description: ''
+      operationId: admin signin
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/signin'
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Invalid request
+        '402':
+          description: DB error
+        # security:
+        #   - auth_admin:
+        #       - read:content
+  /admin/content:
+    post:
+      tags:
+        - Admin
+      summary: Content for admins only 
+      description: ''
+      operationId: admin content
+      responses:
+        '200':
+          description: hello world
+        '401':
+          description: Invalid Token
+      security:
+        - auth_admin: []
+  /customer/signup:
+    post:
+      tags:
+        - Customer
+      summary: Signup for admins
+      description: ''
+      operationId: customer signup
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/signup'
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Invalid request
+        '402':
+          description: DB error
+      # security:
+      #   - auth_admin:
+      #       - read:content
+  /customer/signin:
+    post:
+      tags:
+        - Customer
+      summary: Signin for admins
+      description: ''
+      operationId: customer signin
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/signin'
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Invalid request
+        '402':
+          description: DB error
+        # security:
+        #   - auth_admin:
+        #       - read:content
+  /customer/content:
+    post:
+      tags:
+        - Customer
+      summary: Content for admins only 
+      description: ''
+      operationId: customer content
+      responses:
+        '200':
+          description: hello world
+        '401':
+          description: Invalid Token
+      security:
+        - auth_customer: []
+        
+securityDefinitions:
+  auth_admin:
+    type: apiKey
+    in: header
+    name: Authorization
+  auth_customer:
+    type: apiKey
+    in: header
+    name: Authorization
+definitions:
+  signup:
+    type: object
+    required:
+      - Username
+      - Email
+      - Password
+    properties:
+      Username:
+        type: string
+        example: Logan
+      Email:
+        type: string
+        example: logan@test.com
+      Password:
+        type: string
+        example: elephant
+    xml:
+      name: signup
+  signin:
+    type: object
+    required:
+      - Username
+      - Email
+      - Password
+    properties:
+      Email:
+        type: string
+        example: logan@test.com
+      Password:
+        type: string
+        example: elephant
+    xml:
+      name: signin
