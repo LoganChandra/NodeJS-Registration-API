@@ -1,9 +1,9 @@
-To get started in the console execute the following:
+To get started:
 
-1. cd API
-2. npm i
+1. Run cd API
+2. Run npm i
 3. Create an .env file in the root
 4. Add TOKEN_KEY=supersecretpassword to the .env file
-4. node api.js
+4. Run node api.js
 
 That's it! Your API is running. 
